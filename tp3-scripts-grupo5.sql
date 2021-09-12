@@ -24,4 +24,57 @@ SET actor_id = (SELECT actor_id FROM actor WHERE first_name = 'JENNIFER' AND las
 WHERE film_id = '20';
 
 #1.6)
+UPDATE rental
+SET rental_date = '2004-12-23' 
+WHERE rental_id = '5';
 
+#1.7)
+UPDATE payment, rental SET amount = amount*0.9 
+WHERE payment.payment_date = rental.rental_date;
+
+#1.8)
+UPDATE rental 
+SET staff_id = 3
+WHERE staff_id=1;
+
+#1.9)
+DELETE FROM rental WHERE rental_date < '2005-05-30';
+
+#1.10)
+DELETE FROM staff where email is NULL;
+
+#1.11)
+SELECT staff_id, first_name, last_name
+FROM staff
+WHERE first_name LIKE '%JON%';
+
+#1.12)
+SELECT COUNT(*) FROM rental WHERE rental_date>'2005-06-30';
+
+#1.13)
+SELECT i.film_id, count(*) 
+FROM film AS f 
+	JOIN inventory AS i USING(film_id)  
+		JOIN rental as r using(inventory_id) 
+GROUP BY i.film_id;
+
+#1.14)
+SELECT * FROM rental WHERE rental_date BETWEEN '2005-12-20' AND '2006-01-10';
+
+#1.15)
+SELECT *
+FROM rental 
+WHERE DATEDIFF(return_date, rental_date)>2;
+
+#1.16)
+SELECT COUNT(DISTINCT customer_id) 
+FROM rental 
+WHERE rental_date > '2006-01-31';
+
+#1.17)Basado en que el campo clave es autoincremental
+INSERT INTO staff(first_name,last_name,address_id,store_id,username) 
+VALUES('Black','Widow',1,1,'nat.romanoff');
+
+#1.18) Basado en que el campo clave es autoincremental
+INSERT INTO category(name)
+VALUES('NOMBRE');
