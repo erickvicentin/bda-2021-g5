@@ -78,3 +78,38 @@ VALUES('Black','Widow',1,1,'nat.romanoff');
 #1.18) Basado en que el campo clave es autoincremental
 INSERT INTO category(name)
 VALUES('NOMBRE');
+
+#1.19)
+CREATE TEMPORARY TABLE temp_customer SELECT * FROM customer;
+SET FOREIGN_KEY_CHECKS=0;
+DELETE FROM customer;
+UPDATE temp_customer SET customer_id = customer_id+1;
+INSERT INTO customer(customer_id,store_id,first_name,last_name,email,address_id,active,create_date,last_update) 
+SELECT* FROM temp_customer;
+UPDATE customer SET customer_id = customer_id-1;
+SET FOREIGN_KEY_CHECKS=1;
+
+#1.20)
+UPDATE address SET phone = CONCAT('9-', phone);
+
+#1.21)
+UPDATE film SET rental_duration = rental_duration+2 
+WHERE rental_rate<10;
+
+#1.22)
+SELECT * 
+FROM rental r
+ORDER BY r.rental_id DESC LIMIT 1;
+
+#1.23)
+SELECT DISTINCT s.last_name
+FROM staff AS s, (	SELECT s1.last_name, COUNT(*) AS rep_apellidos
+				FROM staff AS s1
+                GROUP BY s1.last_name) AS t1
+WHERE s.last_name = t1.last_name AND t1.rep_apellidos > 1;
+
+#1.24)
+SELECT COUNT(*) AS 'Cant. por fecha'
+FROM (SELECT DATE(r.rental_date) AS date_rental
+	  FROM rental r) AS t1
+GROUP BY t1.date_rental;
