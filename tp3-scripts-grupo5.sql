@@ -113,3 +113,21 @@ SELECT COUNT(*) AS 'Cant. por fecha'
 FROM (SELECT DATE(r.rental_date) AS date_rental
 	  FROM rental r) AS t1
 GROUP BY t1.date_rental;
+
+#1.25)
+CREATE VIEW vw_promedio_dias AS 
+(SELECT film_id AS Pelicula, AVG(TIMESTAMPDIFF(DAY, r.rental_date, r.return_date)) AS Promedios
+ FROM (rental AS r JOIN inventory AS i USING(inventory_id)) JOIN film AS f USING(film_id)
+ WHERE r.return_date IS NOT NULL
+ GROUP BY film_id);
+ 
+ SELECT * FROM vw_promedio_dias;
+ 
+ #1.26)
+ CREATE VIEW vw_empleados_pagos AS
+ (SELECT staff_id AS Empleado, COUNT(payment_id) Cantidad_Pagos
+  FROM staff AS s JOIN payment AS p USING(staff_id)
+  GROUP BY staff_id 
+  HAVING COUNT(*) > 10);
+  
+  SELECT * FROM vw_empleados_pagos;
