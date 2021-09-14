@@ -209,4 +209,55 @@ GROUP BY c.customer_id
 HAVING COUNT(i.film_id) > 50;
 
 #1.37)
+SELECT c.customer_id, c.first_name
+FROM customer c JOIN rental r USING(customer_id)
+WHERE EXTRACT(year FROM r.rental_date)=2004 AND c.customer_id 
+NOT IN (SELECT c.customer_id
+		FROM customer c JOIN rental r USING(customer_id)
+		WHERE EXTRACT(year FROM r.rental_date)=2005);
+
+#1.38)
+SELECT s1.staff_id CodStaff, s1.first_name Nombre, s1.last_name Apellido
+FROM (SELECT s.staff_id
+	  FROM (staff s JOIN rental r USING(staff_id)) JOIN payment p USING(rental_id)
+      GROUP BY s.staff_id
+      HAVING COUNT(r.rental_id) > 10 AND SUM(p.amount) > 50) AS tab
+JOIN staff s1 USING(staff_id);
+
+#1.39)
+SELECT a.actor_id CodActor, a.first_name Nombre, a.last_name Apellido
+FROM (SELECT fa.actor_id
+	  FROM (film_actor fa JOIN film f USING(film_id)) JOIN film_category fc USING(film_id)
+      GROUP BY fa.actor_id
+HAVING COUNT(DISTINCT(f.film_id)) > 5 AND COUNT(DISTINCT(fc.category_id)) > 2)
+AS tab JOIN actor a USING(actor_id) LIMIT 10;
+
+#1.40)
+SELECT first_name, last_name, customer_id
+FROM (SELECT customer_id
+	  FROM (SELECT c.customer_id, COUNT(r.rental_id) AS veces_alquilado
+			FROM ((customer c JOIN rental r USING(customer_id)) JOIN inventory i USING(inventory_id)) 
+            JOIN film f USING(film_id)
+            GROUP BY c.customer_id) AS t1
+	  JOIN (SELECT res.customer_id, SUM(res.retr_no_entr) AS tot_retr
+			FROM (SELECT *
+				  FROM (SELECT c.customer_id, COUNT(*) AS retr_no_entr
+						FROM ((customer c JOIN rental r USING(customer_id)) JOIN inventory i USING(inventory_id)) 
+						JOIN film f USING(film_id)
+                        WHERE r.return_date IS NULL AND DATEDIFF(current_date(), r.rental_date) > f.rental_duration
+                        GROUP BY c.customer_id) AS tab1
+				  UNION (SELECT c.customer_id, COUNT(*) AS retr_entr
+						 FROM ((customer c JOIN rental r USING(customer_id)) JOIN inventory i USING(inventory_id)) 
+						 JOIN film f USING(film_id)
+						 WHERE r.return_date IS NOT NULL AND DATEDIFF(r.return_date, r.rental_date) > f.rental_duration
+				  GROUP BY c.customer_id)
+                  ORDER BY customer_id) AS res
+			GROUP BY res.customer_id) as t2 USING(customer_id)
+	   WHERE (t2.tot_retr*100)/t1.veces_alquilado > 40) AS id_clientes_atrasados
+JOIN customer cr USING(customer_id);
+                        
+#1.41)
+
+
+
 
