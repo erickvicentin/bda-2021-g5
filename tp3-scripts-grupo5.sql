@@ -255,9 +255,76 @@ FROM (SELECT customer_id
 			GROUP BY res.customer_id) as t2 USING(customer_id)
 	   WHERE (t2.tot_retr*100)/t1.veces_alquilado > 40) AS id_clientes_atrasados
 JOIN customer cr USING(customer_id);
-                        
+
 #1.41)
+CREATE OR REPLACE VIEW peliculas_sin_alquilar_20 AS 
+    SELECT Inv.title, Inv.film_id, Inv.inventario, Alq.alquiladas, (Alq.alquiladas / Inv.inventario) porcentaje_alquiler
+	FROM (SELECT f.title, f.film_id, count(*) inventario
+		  FROM film f JOIN inventory i ON f.film_id = i.film_id
+		  GROUP BY f.title, f.film_id) Inv 
+	JOIN (SELECT i.film_id , count(*) alquiladas
+		  FROM inventory i JOIN rental r ON i.inventory_id = r.inventory_id
+		  WHERE r.return_date IS NULL
+		  GROUP BY film_id) Alq ON (Inv.film_id = Alq.film_id)
+	WHERE (Alq.alquiladas / Inv.inventario) > 0.2 ;
+            
+SELECT * FROM peliculas_sin_alquilar_20;
 
+#1.42)
+SELECT c.customer_id, concat(c.first_name, ' ', last_name) Nombre, r.rental_date
+FROM rental r JOIN customer c ON r.customer_id = c.customer_id 
+	 JOIN (SELECT rental_date_dia dia_con_mayor_alquiler, count(*) alquileres
+		   FROM (SELECT DATE(rental_date) rental_date_dia 
+				 FROM rental) t1
+		   GROUP BY t1.rental_date_dia
+		   ORDER BY alquileres DESC LIMIT 1) t2 ON DATE(r.rental_date) = t2.dia_con_mayor_alquiler
+           LIMIT 10;
+           
+#1.43)
+SELECT c.customer_id, concat(c.first_name, ' ', last_name) Nombre, r.rental_date
+FROM rental r JOIN customer c ON r.customer_id = c.customer_id JOIN
+		(SELECT min(DATE(rental_date)) primer_alquiler
+		 FROM rental) t1 ON DATE(r.rental_date) = t1.primer_alquiler;
 
+#1.44)
+SELECT c.customer_id ID, c.first_name Nombre, c.last_name Apellido
+FROM rental r JOIN customer c ON r.customer_id = c.customer_id	
+WHERE r.rental_date BETWEEN '2005-01-01' AND '2006-12-31';
 
+#1.45)
+SELECT *
+FROM
+  (SELECT i.film_id, ejemplares.ejemplares, sum(p.amount) ingreso
+   FROM payment p
+   JOIN rental r ON r.rental_id = p.rental_id
+   JOIN inventory i ON r.inventory_id = i.inventory_id
+   JOIN
+     (SELECT f.film_id, count(*) ejemplares
+      FROM inventory i
+      JOIN film f ON i.film_id = f.film_id
+      GROUP BY f.film_id) ejemplares ON ejemplares.film_id = i.film_id
+   WHERE ejemplares.ejemplares < 5
+   GROUP BY i.film_id) Film_ejemplares_total_ingreso
+WHERE ingreso > 200;
 
+#1.46)
+SELECT DISTINCT c.customer_id, concat(c.first_name, ' ', c.last_name) AS Nombre
+FROM customer c
+JOIN rental r ON c.customer_id = r.customer_id
+WHERE r.inventory_id in
+    (SELECT DISTINCT i.inventory_id
+     FROM film f
+     JOIN film_category fc ON f.film_id = fc.film_id
+     JOIN category c ON fc.category_id = c.category_id
+     JOIN inventory i ON i.film_id = f.film_id
+     WHERE c.name = 'Action') ;
+     
+#1.47)
+SELECT DISTINCT concat(s.first_name, ' ', s.last_name) AS Nombre ,c.name
+FROM rental r
+JOIN inventory i ON r.inventory_id = i.inventory_id
+JOIN film f ON f.film_id = i.film_id
+JOIN film_category fc ON f.film_id = fc.film_id
+JOIN category c ON c.category_id = fc.category_id
+JOIN staff s ON s.staff_id = r.staff_id
+ORDER BY Nombre, c.name
