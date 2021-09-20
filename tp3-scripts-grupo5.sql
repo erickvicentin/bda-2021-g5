@@ -329,6 +329,20 @@ JOIN category c ON c.category_id = fc.category_id
 JOIN staff s ON s.staff_id = r.staff_id
 ORDER BY Nombre, c.name
 
+#2.1)
+alter table comisario add sueldo decimal(10,2);
+
+#2.2)
+update comisario
+set sueldo=sueldo*1.1
+where comisario.sueldo<5000;
+
+#2.3)
+update comisario
+set sueldo=5000
+where sueldo>=(50000/11) and sueldo<5000;
+
+
 # 3.1)  Los arrendatarios que arriendan la casa ubicada en la calle Carrera nº 1024, Corrientes.
 
 SELECT a.cuit, a.nombre, a.apellido
