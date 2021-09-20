@@ -524,3 +524,56 @@ where t2.contador= (
 		select s.age as age, s.standing as standing, count(s.snum) as contador
 		from student s
 		order by s.age)t);
+        
+#4.4)
+#a
+select sof.ename, sof.age
+from( select e.ename, e.age
+from emp e, dept d, works w
+where d.did=w.did and w.eid=e.eid and d.dname='Software') as sof,
+(select e.ename, e.age
+from emp e, dept d, works w
+where d.did = w.did and e.eid and d.dname = 'Hardware') as Har
+where sof.ename = Har.ename and sof.age = Har.age;
+
+#b
+select distinct d.managerid
+from dept d,(select d.managerid, sum(d.budget) as sal
+from dept d
+group by d.managerid) as x
+where d.managerid=x.managerid and x.sal>1000000;
+
+#c
+select e.ename
+from emp e,(select x.managerid
+from (select d.managerid, sum(d.budget) as sal
+from dept d
+group by d.managerid) as x
+where x.sal = (select max(y.sal) from (select sum(d.budget) as sal from dept d
+group by d.managerid) as y)) as f
+where e.eid=f.managerid;
+
+#d
+select x.managerid
+from (select d.managerid, sum(d.budget) as sal
+from dept d
+group by d.managerid) as x
+where x.sal>5000000;
+
+#e
+select x.managerid
+from (select d.managerid, sum(d.budget) as sal
+from dept d
+group by d.managerid) as x
+where x.sal=(select max(y.sal) from (select sum(d.budget) as sal from dept d
+group by d.managerid) as y);
+
+#f
+create view vw_presupuesto as
+select distinct e.ename
+from (select d.managerid
+from dept d
+where d.budget>1000000) as d2,
+(select d.managerid from dept d
+where d.budget<5000000) as d3, emp e
+where d2.managerid=d3.managerid and e.eid=d2.managerid;
