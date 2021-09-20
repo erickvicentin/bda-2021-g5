@@ -1,4 +1,4 @@
-#USE sakila;
+USE sakila;
 
 #1.1)
 INSERT INTO customer (store_id,first_name, last_name, email, address_id, active, create_date)
@@ -328,6 +328,86 @@ JOIN film_category fc ON f.film_id = fc.film_id
 JOIN category c ON c.category_id = fc.category_id
 JOIN staff s ON s.staff_id = r.staff_id
 ORDER BY Nombre, c.name
+
+#2.1)
+alter table comisario add sueldo decimal(10,2);
+
+#2.2)
+update comisario
+set sueldo=sueldo*1.1
+where comisario.sueldo<5000;
+
+#2.3)
+update comisario
+set sueldo=5000
+where sueldo>=(50000/11) and sueldo<5000;
+
+
+# 3.1)  Los arrendatarios que arriendan la casa ubicada en la calle Carrera nº 1024, Corrientes.
+
+SELECT a.cuit, a.nombre, a.apellido
+FROM arrendatario a JOIN casa c USING(cuit)
+WHERE c.calle LIKE "Carrera" AND c.nro = 1024 AND c.ciudad LIKE "Corrientes";
+
+#3.2) ¿Cuánto le deben a María Pérez?
+SELECT a.cuit , a.nombre, a.apellido
+FROM arrendatario a JOIN arrienda ar USING(cuit)
+WHERE a.nombre like 'Maria' and a.apellido like 'Perez'
+GROUP BY a.cuit
+
+#3.3) ¿Cuál es la deuda total para cada dueño?
+
+SELECT d.cuit, SUM(a.deuda)
+FROM duenio d JOIN arrienda a USING(cuit)
+GROUP BY d.cuit;
+
+#3.4) Liste todas las personas de la base de datos
+SELECT * FROM arrendatario a JOIN duenio USING(cuit); 
+
+#3.5) Indique los dueños que poseen tres o más casas.
+
+SELECT d.cuit AS 'Dueño Cuit', count(*) AS 'N° Casas'
+FROM duenio d JOIN casa c USING(cuit)
+GROUP BY d.cuit
+HAVING COUNT(*) >= 3;
+
+#3.6) Liste los dueños que tengan deudores en todas sus casas.
+SELECT d.cuit
+FROM duenio d JOIN arrienda a USING(cuit)
+WHERE a.deuda>0
+GROUP BY d.cuit
+HAVING COUNT(a.id_casa) = (SELECT count(c.id_casa)
+                           FROM duenio d1 JOIN casa c USING(cuit)
+                           WHERE d1.cuit=d.cuit);
+
+#3.7) Cree una vista que se llame “vw_estadisticas” que entregue estadísticas sobre los arrendatarios por casa
+
+CREATE OR REPLACE VIEW estadisticas AS
+SELECT *
+FROM 
+    (-- Promedio
+    SELECT AVG(tab.cant_arr)'Promedio de Arrendatarios x Casa'
+    FROM (SELECT c.id_casa AS nro_casa, COUNT(*) AS cant_arr
+        FROM casa c JOIN arrendatario a USING(cuit)
+        GROUP BY c.id_casa) as tab) AS promedio,
+
+    (-- La varianza
+    SELECT var_pop(tab.cant_arr)'Varianza Arrendatarios x Casa'
+    FROM (SELECT c.id_casa AS nro_casa, COUNT(*) AS cant_arr
+          FROM casa c JOIN arrendatario a USING(cuit)
+          GROUP BY c.id_casa) AS tab) AS varianza,
+
+    (-- Maximo
+        SELECT MAX(tab.cant_arr)'Valor maximo' 
+        FROM (select c.id_casa AS nro_casa, COUNT(*) AS cant_arr
+            FROM casa c JOIN arrendatario a USING(cuit)
+            GROUP BY c.id_casa) as tab) as maximo,
+    
+    (-- Minimo
+    SELECT MIN(tab.cant_arr)'Valor minimo' 
+    FROM (select c.id_casa AS nro_casa, COUNT(*) AS cant_arr
+        FROM casa c JOIN arrendatario a USING(cuit)
+        GROUP BY c.id_casa) as tab) as minimo;
 
 #Ejercicio 4
 #4.1)
