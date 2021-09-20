@@ -431,6 +431,33 @@ select distinct e.ename
 from employees e inner join certified c on c.eid=e.eid inner join aircraft a on a.aid=c.aid
 where a.aname like '%Boeing%';
 
+#f
+select distinct e.eid from employees e
+where e.salary = (select max(e.salary) from employees e);
+
+#g 
+select e.eid from employees e
+where e.salary =(select max(e.salary)
+from employees e
+where e.salary< (select max(e.salary) from employees e));
+
+#h
+select e.eid from employees e, (select c.eid as eid, count(c.aid) as contador from certified c
+group by c.eid) t2
+where e.eid=t2.eid and
+t2.contador=(select max(t.contador) from (select c.eid as eid, count(c.aid) as contador from certified c group by c.eid) t);
+
+#i
+create view vw_certx3 as
+select distinct c.eid
+from certified c
+group by c.eid
+having count(*)=3;
+
+#j 
+create view vw_sumasalary as
+select sum(e.salary) from employees e;
+
 #4.3) 
 #a
 SELECT s.sname
