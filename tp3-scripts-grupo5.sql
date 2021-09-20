@@ -328,3 +328,95 @@ JOIN film_category fc ON f.film_id = fc.film_id
 JOIN category c ON c.category_id = fc.category_id
 JOIN staff s ON s.staff_id = r.staff_id
 ORDER BY Nombre, c.name
+
+#Ejercicio 4
+#4.1)
+#a 
+SELECT DISTINCT s.sname
+FROM suppliers s INNER JOIN catalog c ON c.sid=s.sid INNER JOIN parts p ON p.pid=c.pid
+WHERE p.color LIKE '%Red%';
+
+#b
+SELECT c.sid
+FROM catalog c INNER JOIN parts p ON p.pid=c.pid
+WHERE p.color like '%Red%'
+UNION
+SELECT c.sid
+FROM catalog c INNER JOIN parts p ON p.pid=c.pid
+WHERE p.color like '%Green%';
+
+#c 
+select distinct s.sname
+from suppliers s inner join catalog c on c.sid=s.sid inner join parts p on p.pid=c.pid
+where p.color like '%Red%' or s.address like '%221 Packer Street%';
+
+#d 
+select c.sid
+from catalog c inner join parts p on p.pid=c.pid
+where p.color like '%Red%' and c.sid in (select c2.sid 
+from catalog c2 inner join parts p2 on c2.pid=p2.pid
+where p2.color like '%Green%');
+
+#e
+select s.sid
+from suppliers s
+where not exists ((select p.pid 
+from parts p 
+where not exists (select c.pid
+from catalog c 
+where c.pid=p.pid and s.sid=c.sid)));
+
+#f 
+select s.sid
+from suppliers s
+where not exists((select p.pid
+from parts p
+where p.color like '%Red%' and not exists (select c.pid
+from catalog c
+where c.pid=p.pid and s.sid=c.sid)));
+
+#g 
+select s.sid
+from suppliers s 
+where not exists((select p.pid from parts p 
+where p.color like '%Red%' and not exists(select c.pid from catalog c
+where c.pid=p.pid and s.sid=c.sid)))
+UNION
+select s.sid
+from suppliers s 
+where not exists((select p.pid from parts p 
+where p.color like '%Green%' and not exists (select c.pid from catalog c
+where c.pid=p.pid and s.sid=c.sid)));
+
+#h 
+select s.sid
+from suppliers s
+where not exists((select p.pid from parts p 
+where p.color like '%Red%' and not exists(select c.pid from catalog c 
+where c.pid=p.pid and s.sid=c.sid))) and s.sid not in (select s.sid from suppliers s 
+where not exists((select p.pid from parts p 
+where p.color like '%Green%' and not exists(select c.pid from catalog c 
+where c.pid=p.pid and s.sid=c.sid))));
+
+#i 
+select distinct c1.sid, c2.sid
+from catalog c1, catalog c2 
+where c1.sid<>c2.sid and c1.cost>c2.cost;
+
+#j 
+select p.pid from parts p, (select c.pid as pid, count(c.sid) as contador 
+from catalog c group by c.pid) t
+where t.pid=p.pid and t.contador>1;
+
+#k 
+CREATE VIEW vista_k AS
+select c.pid
+from catalog c inner join suppliers s on s.sid=c.pid
+where c.cost = (select max(c1.cost)
+from catalog c1
+where s.sid=c1.sid and s.sname="Yosemite Sham");
+
+#l
+create view vw_menosde200 as
+select distinct c.pid from catalog c 
+where c.cost<200;
