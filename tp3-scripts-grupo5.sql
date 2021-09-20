@@ -1,4 +1,4 @@
-USE sakila;
+#USE sakila;
 
 #1.1)
 INSERT INTO customer (store_id,first_name, last_name, email, address_id, active, create_date)
@@ -420,3 +420,107 @@ where s.sid=c1.sid and s.sname="Yosemite Sham");
 create view vw_menosde200 as
 select distinct c.pid from catalog c 
 where c.cost<200;
+
+#4.2)
+#a 
+select distinct c.eid from certified c inner join aircraft a on a.aid=c.aid
+where a.aname like '%Boeing%';
+
+#b 
+select distinct e.ename
+from employees e inner join certified c on c.eid=e.eid inner join aircraft a on a.aid=c.aid
+where a.aname like '%Boeing%';
+
+#4.3) 
+#a
+SELECT s.sname
+FROM faculty f INNER JOIN class c ON c.fid=f.fid INNER JOIN enrolled i ON i.cname=c.name INNER JOIN student s ON s.snum=i.snum
+WHERE f.fname LIKE'I%_Teach';
+
+#b
+SELECT c.name
+FROM class c
+WHERE c.room='R128' and c.name IN(
+	SELECT c.name
+	FROM class c INNER JOIN enrolled i ON c.name=i.cname
+	WHERE c.name IN(
+		SELECT Count(snum)>5
+		FROM class c INNER JOIN  enrolled i ON c.name=i.cname
+		GROUP BY(c.name)))
+
+#c
+SELECT s.sname
+FROM (student s INNER JOIN enrolled i ON i.snum=s.snum INNER JOIN class c ON c.name=i.cname),
+	(student s2 INNER JOIN  enrolled i2 ON i2.snum=s2.snum INNER JOIN class c2 ON c2.name=i2.cname)
+WHERE c.name<>c2.name AND c.meets_at=c2.meets_at AND s.snum=s2.snum
+
+#d
+SELECT DISTINCT f.fname
+FROM faculty f INNER JOIN class c on c.fid=f.fid
+
+#e
+SELECT t.fname
+FROM(
+	SELECT f.fname,COUNT(*) as CantCursos
+	FROM faculty f INNER JOIN class c on f.fid=c.fid
+	GROUP BY f.fid)t
+WHERE t.CantCursos<5
+
+#f
+SELECT standing,AVG(s.age)
+FROM student s
+GROUP BY  s.standing
+
+#g
+SELECT standing,AVG(s.age)
+FROM student s
+WHERE s.standing<>'JR'
+GROUP BY s.standing
+
+#h
+SELECT s.sname, tb.Cursos
+FROM (
+SELECT i.snum, COUNT(c.name) as cursos
+FROM class c INNER JOIN enrolled i on i.cname=c.name
+WHERE c.room='R128'
+GROUP BY i.snum
+)tb INNER JOIN student s ON s.snum=tb.snum
+GROUP BY  s.snum
+
+#i 
+CREATE VIEW vw_maximainsc AS
+SELECT s.sname
+FROM student s INNER JOIN (
+	SELECT i.snum as snum, COUNT(i.cname) as contador
+	FROM enrolled i
+	GROUP BY (i.snum)
+)t ON t.snum=s.snum
+WHERE t.contador=(
+	SELECT MAX(t2.contador)
+FROM(
+	SELECT i.snum as snum, COUNT(i.cname) as contador
+FROM enrolled i
+GROUP BY (i.snum)
+) t2);
+
+#j
+CREATE VIEW vw_noinscriptos AS
+select t.sname from(
+	select s.sname from student s
+	where s.snum not in(
+		select i.snum
+	from enrolled i)
+) as t;
+
+#k
+set sql_mode='';
+select t2.age, t2.standing
+from(
+	select s.age as age, s.standing as standing, count(s.snum) as contador
+	from student s order by s.age) t2
+where t2.contador= (
+	select max(t.contador)
+	from( 
+		select s.age as age, s.standing as standing, count(s.snum) as contador
+		from student s
+		order by s.age)t);
