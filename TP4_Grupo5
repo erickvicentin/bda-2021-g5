@@ -1,0 +1,61 @@
+#2.1
+
+create table TP4.CERVEZAS(
+nombre varchar(40),
+fabricante varchar(60),
+primary key (nombre)
+)
+
+create table TP4.PRECIOS(
+bar varchar(60),
+cerveza varchar (40) not null,
+precio decimal(6,2),
+foreign key (cerveza) references CERVEZAS(nombre)	
+);
+
+#2.2
+insert into CERVEZAS values ('brahma','Cerveceria Quilmes'),('quilmes','Cerveceria Quilmes'),
+							('Imperial Golden','Coca Cola'),('Imperial Larger','Coca Cola');
+                            
+insert into PRECIOS values ('La republica','brahma',200),('La republica','quilmes',200),
+('La republica','Imperial Golden',250),('La republica','Imperial Larger',250);
+
+#2.3
+delimiter | 
+create trigger before_precios_insert
+	before insert on PRECIOS
+    for each row
+begin
+	if (new.cerveza) not in (SELECT nombre from CERVEZAS) then
+	insert into CERVEZAS values (new.cerveza,null);
+    end if;
+    
+end
+|
+delimiter ;
+
+#2.4
+create index bar_inx on PRECIOS(bar);
+
+create table TP4.SUPER_PRECIOS(
+bar varchar(60),
+cerveza varchar (40), -- marca de la cerveza
+precio decimal(6,2),
+fecha date,
+primary key (bar,cerveza),
+foreign key (bar) references PRECIOS(bar),
+foreign key (cerveza) references CERVEZAS(nombre)	
+)
+
+delimiter | 
+create trigger after_precios_update
+	after update on PRECIOS
+    for each row
+begin
+	if new.precio > 150 then
+	insert into SUPER_PRECIOS values (new.bar,new.cerveza,new.precio,current_date());
+    end if;
+    
+end;
+|
+delimiter ;
