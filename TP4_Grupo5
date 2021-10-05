@@ -1,3 +1,15 @@
+#1.1)
+delimiter 
+CREATE PROCEDURE `empleado_total_cobrado`(staff_id INT)
+	BEGIN
+		SELECT s.first_name Nombre, s.last_name Apellido, SUM(amount) 'Total cobrado'
+		FROM payment p JOIN staff s on p.staff_id = s.staff_id 
+		WHERE s.staff_id = staff_id
+		GROUP BY s.staff_id;
+	END;
+    
+CALL empleado_total_cobrado(1);
+
 #2.1
 
 create table TP4.CERVEZAS(
@@ -59,3 +71,68 @@ begin
 end;
 |
 delimiter ;
+
+#5.1)
+CREATE TABLE tiempo (
+	fecha DATE PRIMARY KEY NOT NULL, 
+	dia INT NOT NULL, 
+	dia_semana VARCHAR(50) NOT NULL, 
+	mes VARCHAR(50) NOT NULL, 
+	cuatrimestre VARCHAR(50) NOT NULL, 
+	anio INT NOT NULL);
+    
+#5.2)
+delimiter |
+CREATE PROCEDURE devolver_mes(num INT)
+    BEGIN
+        CASE num
+            WHEN 1 THEN SELECT 'Enero';
+            WHEN 2 THEN SELECT 'Febrero';
+            WHEN 3 THEN SELECT 'Marzo';
+            WHEN 4 THEN SELECT 'Abril';
+            WHEN 5 THEN SELECT 'Mayo';
+            WHEN 6 THEN SELECT 'Junio';
+            WHEN 7 THEN SELECT 'Julio';
+            WHEN 8 THEN SELECT 'Agosto';
+            WHEN 9 THEN SELECT 'Septiembre';
+            WHEN 10 THEN SELECT 'Octubre';
+            WHEN 11 THEN SELECT 'Noviembre';
+            WHEN 12 THEN SELECT 'Diciembre';
+        END CASE;
+    END;
+|
+
+#5.3)
+delimiter |
+CREATE PROCEDURE insertar_tiempos (desde DATE, hasta DATE)
+    BEGIN
+        WHILE desde <= hasta DO
+            INSERT INTO tiempo (fecha, dia, dia_semana, mes, cuatrimestre, anio)
+            VALUES (
+                DATE(desde),
+                DATE(desde),
+                DAYNAME(desde),
+                MONTHNAME(desde),
+                QUARTER(desde),
+                YEAR(desde));
+            SELECT DATE(desde),
+                DAY(desde),
+                DAYNAME(desde),
+                MONTHNAME(desde),
+                QUARTER(desde),
+                YEAR(desde);
+            
+           SET desde = DATE_ADD(desde,INTERVAL 1 DAY);
+        END WHILE;
+    END 
+
+|
+
+
+#5.5)
+create table ventas (
+	id_Venta int primary key,
+	fecha date not null,
+	producto varchar(50) not null,
+	unidades_vendidas int not null,
+	precio_unitario decimal (5,2) not null);
