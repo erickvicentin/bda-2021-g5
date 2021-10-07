@@ -124,6 +124,47 @@ end;
 |
 delimiter ;
 
+#3.1
+CREATE TABLE if not exists SOCIO
+(	
+	num_soc int not null auto_increment,
+	nombre varchar(50) not null,
+	direccion varchar(50) not null,
+    telefono varchar(13) not null,
+	PRIMARY KEY(num_soc)
+);
+
+#3.2
+INSERT INTO SOCIO (nombre, direccion, telefono)
+VALUES  ('Pedro Lopez','Las Heras 521','379154252525'),
+		('Julian Cardozo','Pio 4 321','0379154353535'),
+        ('Pablo Quintana','Calle Siempre Viva 201','0379154454545'),
+        ('Belen Vera','Hipodromo 212','0379154555555'),
+        ('Catalina Rivera','San Martin 562','0379154656565'),
+        ('Benjamin Rodriguez','Belgrano 234','0379154757575'),
+        ('Augusto Caceres','Marcelo Gallardo 912','0379154858585'),
+        ('Sofia Lucero','Las Montañas 422','0379154959595');
+        
+#3.3 y 3,4
+CREATE TABLE if not exists SOCIO_BAJA
+(	
+	num_soc smallint not null,
+	nombre varchar(50) not null,
+	direccion varchar(50) not null,
+    telefono varchar(13) not null,
+    fecha_baja datetime not null,
+	PRIMARY KEY(num_soc)
+);
+
+SELECT * FROM SOCIO;
+
+#3.5
+CREATE TRIGGER crearBackup
+    AFTER DELETE
+    ON SOCIO FOR EACH ROW
+    INSERT INTO SOCIO_BAJA (num_soc, nombre, direccion, telefono, fecha_baja) VALUES (old.num_soc, old.nombre, 
+    old.direccion, old.telefono, NOW());
+
 #5.1)
 CREATE TABLE tiempo (
 	fecha DATE PRIMARY KEY NOT NULL, 
