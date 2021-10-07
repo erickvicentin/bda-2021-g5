@@ -58,6 +58,17 @@ END |
 # TRIGGERS
 
 #1.6)
+
+delimiter | 
+CREATE TRIGGER after_category_delete
+	BEFORE DELETE ON category
+    FOR EACH ROW
+BEGIN
+	DELETE FROM film_category 
+    WHERE old.category_id = category_id;
+END |
+delimiter ;
+
 #1.7)
 #1.8)
 #1.9)
