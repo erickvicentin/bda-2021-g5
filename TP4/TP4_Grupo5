@@ -229,3 +229,64 @@ create table ventas (
 	producto varchar(50) not null,
 	unidades_vendidas int not null,
 	precio_unitario decimal (5,2) not null);
+
+#5.6)
+delimiter |
+create procedure registrar_venta (id int, fecha date, producto varchar(50), cantidad int, preciouni decimal(5,2))
+    begin
+        insert into ventas (id_Venta, fecha, producto, unidades_vendidas, precio_unitario)
+        values (
+                id,
+                fecha,
+                producto,
+                cantidad,
+                preciouni);
+        select
+                id,
+                fecha,
+                producto,
+                cantidad,
+                preciouni;
+    end;
+|
+
+#5.8)
+delimiter |
+create procedure mostrar_estadisticas_prueba (num int)
+    begin
+        case num
+            when 1 then
+                -- Valor total de las ventas.
+                select id_Venta as Venta, (unidades_vendidas*precio_unitario) as Precio_Total
+                from ventas
+                order by Precio_Total desc;
+            when 2 then
+                -- Valor total de las ventas en el año 2011.
+                select id_Venta as Venta, (unidades_vendidas*precio_unitario) as Precio_Total, fecha as Fecha
+                from ventas
+                where year(fecha) = 2011
+                order by Precio_Total desc;
+            when 3 then
+                -- Valor total de las ventas en 2012.
+                select id_Venta as Venta, (unidades_vendidas*precio_unitario) as Precio_Total, fecha as Fecha
+                from ventas
+                where year(fecha) = 2012
+                order by Precio_Total desc;
+            when 4 then
+                -- Listado ordenado de las ventas por día de la semana.
+                select id_Venta as Venta, (unidades_vendidas*precio_unitario) as Precio_Total, dayname(fecha) as Día
+                from ventas
+                order by dayofweek(fecha) asc;
+            when 5 then
+                -- Listado ordenado de las ventas por mes del año.
+                select id_Venta as Venta, (unidades_vendidas*precio_unitario) as Precio_Total, monthname(fecha) Mes, year(fecha) as Año
+                from ventas
+                order by month(fecha) asc;
+            when 6 then
+                -- Listado ordenado de la ventas por cuatrimestre del año.
+                select id_Venta as Venta, (unidades_vendidas*precio_unitario) as Precio_Total, quarter(fecha) as Cuatrimestre, year(fecha) as Año
+                from ventas
+                order by quarter(fecha) asc;
+        end case;
+    end;
+|
