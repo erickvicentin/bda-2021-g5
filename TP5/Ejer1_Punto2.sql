@@ -137,37 +137,52 @@ FLUSH PRIVILEGES;
 
 USE sakila;
 GRANT SELECT ON sakila.clientes to 'Marta'@'localhost' WITH GRANT OPTION;
+GRANT SELECT ON sakila.clientes to '%'@'localhost' WITH GRANT OPTION;
 
 
 #e) 
 DELIMITER $$
-CREATE PROCEDURE SP_CuentasPorCliente (cliente VARCHAR(45))
+CREATE PROCEDURE SP_CuentasPorCliente (nomb_cli VARCHAR(45))
 BEGIN
-	
-    SELECT SUM()
-    WHERE (SELECT * FROM cuentas
-			WHERE cuentas.id = clientes_cuentas.id) 
-    
-    
-END $$
-DELIMITER ;
-
-SELECT SUM(saldo) 
-FROM cuentas 
-INNER JOIN clientes_cuentas AS cli_cu
-ON cuentas.id = (SELECT id_cuenta
+    SELECT SUM(saldo) 
+	FROM cuentas 
+	WHERE cuentas.id IN (SELECT id_cuenta
 				FROM clientes_cuentas
 				INNER JOIN clientes AS cli
 				ON cli.dni = clientes_cuentas.dni
-				WHERE cli.nombre = 'Miguel');
+				WHERE cli.nombre = nomb_cli);
+END $$
+DELIMITER ;
 
 
+
+SELECT id_cuenta
+				FROM clientes_cuentas
+				INNER JOIN clientes AS cli
+				ON cli.dni = clientes_cuentas.dni
+				WHERE cli.nombre = 'Miguel';
 
 INSERT INTO cuentas(id, id_suc, saldo) VALUES(2,1,100);
 INSERT INTO clientes(dni,nombre,apellido,tel) VALUES(11111111,"Miguel","Ito",1234);
 INSERT INTO clientes_cuentas VALUES(11111111,2);
 
+SELECT * FROM cuentas;
+SELECT * FROM clientes_cuentas;
+
+CALL SP_CuentasPorCliente('Miguel');
+
+GRANT EXECUTE ON PROCEDURE SP_CuentasPorCliente TO 'Marta'@'localhost';
+GRANT EXECUTE ON PROCEDURE SP_CuentasPorCliente TO 'Jorge'@'localhost';
+
+#f)
+SELECT user FROM mysql.user;
+
+GRANT SELECT ON sakila.cuentas to 'Marta'@'localhost';
+GRANT SELECT ON sakila.cuentas to 'jPerez'@'localhost';
+GRANT SELECT ON sakila.cuentas to 'Jorge'@'localhost';
+GRANT SELECT ON sakila.cuentas to 'aFernandez'@'localhost';
 
 
-
-
+#h)
+GRANT SELECT, INSERT, UPDATE ON sakila.transacciones TO 'Marta'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON sakila.transacciones TO 'Jorge'@'localhost';
