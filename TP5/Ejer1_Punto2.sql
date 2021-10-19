@@ -1,9 +1,11 @@
-USE sakila;
+## EJERCICIO 1 - PUNTO 2 
 
+#Creacion de usuarios
 CREATE USER 'Marta'@'localhost' identified by '123';
 CREATE USER 'Jorge'@'localhost' identified by '123';
 
 
+#CREACION DE TODAS LAS TABLAS
 CREATE TABLE ciudades(
 	id INT,
     nombre VARCHAR(40) NOT NULL,
@@ -64,6 +66,8 @@ CREATE TABLE transacciones(
     CONSTRAINT `PK_transacciones` PRIMARY KEY(id),
     CONSTRAINT `FK_transacciones_tipos` FOREIGN KEY(tipo) REFERENCES tipos(id)
 );
+
+## FIN DE CREACION DE TODAS LAS TABLAS
 
 SHOW GRANTS FOR 'Jorge'@'localhost';
 
@@ -166,6 +170,7 @@ INSERT INTO cuentas(id, id_suc, saldo) VALUES(2,1,100);
 INSERT INTO clientes(dni,nombre,apellido,tel) VALUES(11111111,"Miguel","Ito",1234);
 INSERT INTO clientes_cuentas VALUES(11111111,2);
 
+
 SELECT * FROM cuentas;
 SELECT * FROM clientes_cuentas;
 
@@ -186,3 +191,25 @@ GRANT SELECT ON sakila.cuentas to 'aFernandez'@'localhost';
 #h)
 GRANT SELECT, INSERT, UPDATE ON sakila.transacciones TO 'Marta'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON sakila.transacciones TO 'Jorge'@'localhost';
+
+#h) 
+REVOKE SELECT, INSERT, UPDATE ON sakila.transacciones from 'Marta'@'localhost';
+REVOKE SELECT, INSERT, UPDATE ON sakila.transacciones from 'Jorge'@'localhost';
+
+CREATE ROLE 'administrativo';
+
+GRANT SELECT, INSERT, UPDATE ON sakila.transacciones TO 'administrativo';
+
+GRANT 'administrativo' TO 'Marta'@'localhost';
+GRANT 'administrativo' TO 'Jorge'@'localhost';
+
+#Para activar los roles
+SET ROLE ALL; SELECT CURRENT_ROLE();
+
+#Para chequear el rol asignado
+SELECT CURRENT_ROLE();
+
+#Para probar
+Use sakila;
+insert into transacciones values(125,222,1,2);
+select * from transacciones;
