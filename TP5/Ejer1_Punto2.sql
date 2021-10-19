@@ -167,6 +167,26 @@ INSERT INTO cuentas(id, id_suc, saldo) VALUES(2,1,100);
 INSERT INTO clientes(dni,nombre,apellido,tel) VALUES(11111111,"Miguel","Ito",1234);
 INSERT INTO clientes_cuentas VALUES(11111111,2);
 
+#h) 
+revoque SELECT, INSERT, UPDATE ON sakila.transacciones from 'Marta'@'localhost';
+revoque SELECT, INSERT, UPDATE ON sakila.transacciones from 'Jorge'@'localhost';
+
+CREATE ROLE 'administrativo';
+
+GRANT SELECT, INSERT, UPDATE ON sakila.transacciones TO 'administrativo';
+
+GRANT 'administrativo' TO 'Marta'@'localhost';
+GRANT 'administrativo' TO 'Jorge'@'localhost';
+
+#Para probar
+Use sakila;
+insert into transacciones values(125,222,1,2);
+select * from transacciones;
+
+
+
+
+
 
 
 
