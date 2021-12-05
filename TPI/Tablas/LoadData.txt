@@ -1,0 +1,14 @@
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Financia.csv' into table suppliers fields terminated by ','
+ optionally enclosed by '"' lines terminated by '\n';
+ LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Genera.csv' into table parts fields terminated by ','
+ optionally enclosed by '"' lines terminated by '\n';
+ LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Gravita.csv' into table employees fields terminated by ','
+ optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Lanza.csv' into table aircraft fields terminated by ','
+ optionally enclosed by '"' lines terminated by '\n';
+  LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Nave/Nombre_Estado.csv' into table faculty fields terminated by ','
+ optionally enclosed by '"' lines terminated by '\n';
+  LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Nombre_Tripulante.csv' into table emp fields terminated by ','
+ optionally enclosed by '"' lines terminated by '\n';
+  LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Orbita.csv' into table student fields terminated by ','
+ optionally enclosed by '"' lines terminated by '\n';
