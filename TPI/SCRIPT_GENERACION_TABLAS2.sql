@@ -169,12 +169,13 @@ DROP TABLE IF EXISTS `BDA_TPI`.`Nombre_Tripulante` ;
 CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Nombre_Tripulante` (
   `nombre` VARCHAR(45) NOT NULL,
   `apellido` VARCHAR(45) NOT NULL,
-  `nave_id_nave` INT NOT NULL,
   `nave_matricula` INT NOT NULL,
-  PRIMARY KEY (`nave_id_nave`, `nave_matricula`),
+  `nave_clase_nave` INT NOT NULL,
+  PRIMARY KEY (`nave_matricula`, `nave_clase_nave`),
+  INDEX `fk_Nombre_Tripulante_Nave1_idx` (`nave_matricula` ASC, `nave_clase_nave` ASC) VISIBLE,
   CONSTRAINT `fk_Nombre_Tripulante_Nave1`
-    FOREIGN KEY (`nave_matricula`)
-    REFERENCES `BDA_TPI`.`Nave` (`matricula`)
+    FOREIGN KEY (`nave_matricula` , `nave_clase_nave`)
+    REFERENCES `BDA_TPI`.`Nave` (`matricula` , `clase_nave`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
