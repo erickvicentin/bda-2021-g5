@@ -1,5 +1,6 @@
 USE BDA_TPI; 
 SET FOREIGN_KEY_CHECKS=0;
+mysql --local-infile=1 -u root -p
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Agencia.csv' into table Agencia fields terminated by ';'
 optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES; 
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Basura.csv' into table Basura fields terminated by ';'
