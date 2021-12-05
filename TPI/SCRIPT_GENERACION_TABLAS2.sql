@@ -417,7 +417,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Lanzamiento` (
   `lanza_nave_id_nave` INT NOT NULL,
   `lanza_nave_matricula` INT NOT NULL,
   `lanza_agencia_nombre` VARCHAR(45) NOT NULL,
-  `lanza_orbita_excentricidad` INT NOT NULL,
+  `lanza_orbita_excentricidad` REAL NOT NULL,
   `lanza_orbita_sentido` VARCHAR(15) NOT NULL,
   `lanza_orbita_altura` REAL NOT NULL,
   PRIMARY KEY (`lanza_nave_id_nave`, `lanza_nave_matricula`, `lanza_agencia_nombre`, `lanza_orbita_excentricidad`, `lanza_orbita_sentido`, `lanza_orbita_altura`),
