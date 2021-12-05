@@ -1,3 +1,6 @@
+use TP3ejer4;
+
+
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Financia.csv' into table suppliers fields terminated by ';'
  optionally enclosed by '"' lines terminated by '\n';
  LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Genera.csv' into table parts fields terminated by ';'
@@ -12,3 +15,25 @@ LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Lanza.csv' in
  optionally enclosed by '"' lines terminated by '\n';
   LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Orbita.csv' into table student fields terminated by ';'
  optionally enclosed by '"' lines terminated by '\n';
+
+-- jorch
+
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Agencia.csv' into table suppliers fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+ LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Basura.csv' into table parts fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+ LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Clase_Nave.csv' into table employees fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Empresa.csv' into table aircraft fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+  LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Nave/Esta.csv' into table faculty fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+   LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Nave/Fecha_Inicio.csv' into table faculty fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+  LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Fecha_Fin.csv' into table emp fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+  LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Fecha_Lanzamiento.csv' into table student fields terminated by ';'
+ optionally enclosed by '"' lines terminated by '\n';
+
+ 
+ 
