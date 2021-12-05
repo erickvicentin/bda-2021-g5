@@ -259,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Inicio` (
   `esta_id_nave_matricula` INT NOT NULL,
   `esta_id_orbita_exc` REAL NOT NULL,
   `esta_id_sentido` VARCHAR(15) NOT NULL,
-  `esta_id_altura` INT NOT NULL,
+  `esta_id_altura` REAL NOT NULL,
   PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`),
   CONSTRAINT `fk_Fecha_Inicio_Esta1`
     FOREIGN KEY (`esta_id_nave_clase` , `esta_id_nave_matricula` , `esta_id_orbita_exc` , `esta_id_sentido` , `esta_id_altura`)
@@ -281,7 +281,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Fin` (
   `esta_id_nave_matricula` INT NOT NULL,
   `esta_id_orbita_exc` REAL NOT NULL,
   `esta_id_sentido` VARCHAR(15) NOT NULL,
-  `esta_id_altura` INT NOT NULL,
+  `esta_id_altura` REAL NOT NULL,
   PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`),
   CONSTRAINT `fk_Fecha_Fin_Esta`
     FOREIGN KEY (`esta_id_nave_clase` , `esta_id_nave_matricula` , `esta_id_orbita_exc` , `esta_id_sentido` , `esta_id_altura`)
@@ -419,7 +419,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Lanzamiento` (
   `lanza_agencia_nombre` VARCHAR(45) NOT NULL,
   `lanza_orbita_excentricidad` INT NOT NULL,
   `lanza_orbita_sentido` VARCHAR(15) NOT NULL,
-  `lanza_orbita_altura` INT NOT NULL,
+  `lanza_orbita_altura` REAL NOT NULL,
   PRIMARY KEY (`lanza_nave_id_nave`, `lanza_nave_matricula`, `lanza_agencia_nombre`, `lanza_orbita_excentricidad`, `lanza_orbita_sentido`, `lanza_orbita_altura`),
   CONSTRAINT `fk_Fecha_Lanzamiento`
     FOREIGN KEY (`lanza_nave_id_nave` , `lanza_nave_matricula` , `lanza_agencia_nombre` , `lanza_orbita_excentricidad` , `lanza_orbita_sentido` , `lanza_orbita_altura`)
