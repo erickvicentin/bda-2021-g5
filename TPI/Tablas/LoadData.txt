@@ -1,5 +1,20 @@
-USE BDA_TPI; 
-
+USE BDA_TPI;
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Agencia.csv' into table Agencia fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Basura.csv' into table Basura fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Clase_Nave.csv' into table Clase_Nave fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Empresa.csv' into table Empresa fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Esta.csv' into table Esta fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Fecha_Inicio.csv' into table Fecha_Inicio fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Fecha_Fin.csv' into table Fecha_Fin fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Fecha_Lanzamiento.csv' into table Fecha_Lanzamiento fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n';
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Financia.csv' into table Financia fields terminated by ';'
 optionally enclosed by '"' lines terminated by '\n';
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Genera.csv' into table Genera fields terminated by ';'
