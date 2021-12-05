@@ -235,8 +235,8 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Esta` (
   PRIMARY KEY (`id_nave_clase`, `id_nave_matricula`, `id_orbita_exc`, `id_sentido`, `id_altura`),
   INDEX `id_orbita_idx` (`id_orbita_exc` ASC, `id_sentido` ASC, `id_altura` ASC) VISIBLE,
   CONSTRAINT `id_nave`
-    FOREIGN KEY (`id_nave_matricula`)
-    REFERENCES `BDA_TPI`.`Nave` (`matricula`)
+    FOREIGN KEY (`id_nave_clase` , `id_nave_matricula`)
+    REFERENCES `BDA_TPI`.`Nave` (`clase_nave` , `matricula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `id_orbita`
@@ -259,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Inicio` (
   `esta_id_nave_matricula` INT NOT NULL,
   `esta_id_orbita_exc` REAL NOT NULL,
   `esta_id_sentido` VARCHAR(15) NOT NULL,
-  `esta_id_altura` REAL NOT NULL,
+  `esta_id_altura` INT NOT NULL,
   PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`),
   CONSTRAINT `fk_Fecha_Inicio_Esta1`
     FOREIGN KEY (`esta_id_nave_clase` , `esta_id_nave_matricula` , `esta_id_orbita_exc` , `esta_id_sentido` , `esta_id_altura`)
@@ -281,7 +281,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Fin` (
   `esta_id_nave_matricula` INT NOT NULL,
   `esta_id_orbita_exc` REAL NOT NULL,
   `esta_id_sentido` VARCHAR(15) NOT NULL,
-  `esta_id_altura` REAL NOT NULL,
+  `esta_id_altura` INT NOT NULL,
   PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`),
   CONSTRAINT `fk_Fecha_Fin_Esta`
     FOREIGN KEY (`esta_id_nave_clase` , `esta_id_nave_matricula` , `esta_id_orbita_exc` , `esta_id_sentido` , `esta_id_altura`)
@@ -389,8 +389,8 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Lanza` (
   INDEX `fk_Lanza_Agencia1_idx` (`agencia_nombre` ASC) VISIBLE,
   INDEX `fk_Lanza_Orbita1_idx` (`orbita_excentricidad` ASC, `orbita_sentido` ASC, `orbita_altura` ASC) VISIBLE,
   CONSTRAINT `fk_Lanza_Nave1`
-    FOREIGN KEY (`nave_matricula`)
-    REFERENCES `BDA_TPI`.`Nave` (`matricula`)
+    FOREIGN KEY (`nave_id_nave` , `nave_matricula`)
+    REFERENCES `BDA_TPI`.`Nave` (`clase_nave` , `matricula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Lanza_Agencia1`
@@ -417,9 +417,9 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Lanzamiento` (
   `lanza_nave_id_nave` INT NOT NULL,
   `lanza_nave_matricula` INT NOT NULL,
   `lanza_agencia_nombre` VARCHAR(45) NOT NULL,
-  `lanza_orbita_excentricidad` REAL NOT NULL,
+  `lanza_orbita_excentricidad` INT NOT NULL,
   `lanza_orbita_sentido` VARCHAR(15) NOT NULL,
-  `lanza_orbita_altura` REAL NOT NULL,
+  `lanza_orbita_altura` INT NOT NULL,
   PRIMARY KEY (`lanza_nave_id_nave`, `lanza_nave_matricula`, `lanza_agencia_nombre`, `lanza_orbita_excentricidad`, `lanza_orbita_sentido`, `lanza_orbita_altura`),
   CONSTRAINT `fk_Fecha_Lanzamiento`
     FOREIGN KEY (`lanza_nave_id_nave` , `lanza_nave_matricula` , `lanza_agencia_nombre` , `lanza_orbita_excentricidad` , `lanza_orbita_sentido` , `lanza_orbita_altura`)
