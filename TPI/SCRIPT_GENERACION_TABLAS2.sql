@@ -449,7 +449,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `BDA_TPI`.`Financia` ;
 
 CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Financia` (
-  `porcentaje` REAL(2,2) NOT NULL,
+  `porcentaje` REAL(4,2) NOT NULL,
   `empresa_idempresa` INT NOT NULL,
   `privada_Agencia_nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`porcentaje`, `empresa_idempresa`, `privada_Agencia_nombre`),
