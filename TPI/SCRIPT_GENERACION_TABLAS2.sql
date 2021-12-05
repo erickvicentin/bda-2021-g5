@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Posicion` (
   `theta` REAL NOT NULL,
   `fecha_pos` DATE NOT NULL,
   `id_pos` INT NOT NULL,
-  PRIMARY KEY (`id_pos`),
+  PRIMARY KEY (`id_pos`, `fecha_pos`, `theta`, `delta`, `r`),
   INDEX `id_idx` (`id_pos` ASC) VISIBLE,
   CONSTRAINT `id`
     FOREIGN KEY (`id_pos`)
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Nombre_Tripulante` (
   `apellido` VARCHAR(45) NOT NULL,
   `nave_matricula` INT NOT NULL,
   `nave_clase_nave` INT NOT NULL,
-  PRIMARY KEY (`nave_matricula`, `nave_clase_nave`),
+  PRIMARY KEY (`nave_matricula`, `nave_clase_nave`, `nombre`, `apellido`),
   INDEX `fk_Nombre_Tripulante_Nave1_idx` (`nave_matricula` ASC, `nave_clase_nave` ASC) VISIBLE,
   CONSTRAINT `fk_Nombre_Tripulante_Nave1`
     FOREIGN KEY (`nave_matricula` , `nave_clase_nave`)
@@ -253,14 +253,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `BDA_TPI`.`Fecha_Inicio` ;
 
 CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Inicio` (
-  `dia` DATE NULL,
-  `hora` TIME NULL,
+  `dia` DATE NOT NULL,
+  `hora` TIME NOT NULL,
   `esta_id_nave_clase` INT NOT NULL,
   `esta_id_nave_matricula` INT NOT NULL,
   `esta_id_orbita_exc` REAL NOT NULL,
   `esta_id_sentido` VARCHAR(15) NOT NULL,
   `esta_id_altura` REAL NOT NULL,
-  PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`),
+  PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`, `dia`, `hora`),
   CONSTRAINT `fk_Fecha_Inicio_Esta1`
     FOREIGN KEY (`esta_id_nave_clase` , `esta_id_nave_matricula` , `esta_id_orbita_exc` , `esta_id_sentido` , `esta_id_altura`)
     REFERENCES `BDA_TPI`.`Esta` (`id_nave_clase` , `id_nave_matricula` , `id_orbita_exc` , `id_sentido` , `id_altura`)
@@ -275,14 +275,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `BDA_TPI`.`Fecha_Fin` ;
 
 CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Fin` (
-  `dia` DATE NULL,
-  `hora` TIME NULL,
+  `dia` DATE NOT NULL,
+  `hora` TIME NOT NULL,
   `esta_id_nave_clase` INT NOT NULL,
   `esta_id_nave_matricula` INT NOT NULL,
   `esta_id_orbita_exc` REAL NOT NULL,
   `esta_id_sentido` VARCHAR(15) NOT NULL,
   `esta_id_altura` REAL NOT NULL,
-  PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`),
+  PRIMARY KEY (`esta_id_nave_clase`, `esta_id_nave_matricula`, `esta_id_orbita_exc`, `esta_id_sentido`, `esta_id_altura`, `dia`, `hora`),
   CONSTRAINT `fk_Fecha_Fin_Esta`
     FOREIGN KEY (`esta_id_nave_clase` , `esta_id_nave_matricula` , `esta_id_orbita_exc` , `esta_id_sentido` , `esta_id_altura`)
     REFERENCES `BDA_TPI`.`Esta` (`id_nave_clase` , `id_nave_matricula` , `id_orbita_exc` , `id_sentido` , `id_altura`)
@@ -363,7 +363,7 @@ DROP TABLE IF EXISTS `BDA_TPI`.`Nombre_Estado` ;
 CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Nombre_Estado` (
   `nombre` VARCHAR(45) NOT NULL,
   `publica_agencia_nombre` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`publica_agencia_nombre`),
+  PRIMARY KEY (`publica_agencia_nombre`, `nombre`),
   INDEX `fk_Nombre_Estado_Publica1_idx` (`publica_agencia_nombre` ASC) VISIBLE,
   CONSTRAINT `fk_Nombre_Estado_Publica1`
     FOREIGN KEY (`publica_agencia_nombre`)
@@ -412,15 +412,15 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `BDA_TPI`.`Fecha_Lanzamiento` ;
 
 CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Fecha_Lanzamiento` (
-  `dia` DATE NULL,
-  `hora` TIME NULL,
+  `dia` DATE NOT NULL,
+  `hora` TIME NOT NULL,
   `lanza_nave_id_nave` INT NOT NULL,
   `lanza_nave_matricula` INT NOT NULL,
   `lanza_agencia_nombre` VARCHAR(45) NOT NULL,
   `lanza_orbita_excentricidad` REAL NOT NULL,
   `lanza_orbita_sentido` VARCHAR(15) NOT NULL,
   `lanza_orbita_altura` REAL NOT NULL,
-  PRIMARY KEY (`lanza_nave_id_nave`, `lanza_nave_matricula`, `lanza_agencia_nombre`, `lanza_orbita_excentricidad`, `lanza_orbita_sentido`, `lanza_orbita_altura`),
+  PRIMARY KEY (`lanza_nave_id_nave`, `lanza_nave_matricula`, `lanza_agencia_nombre`, `lanza_orbita_excentricidad`, `lanza_orbita_sentido`, `lanza_orbita_altura`, `dia`, `hora`),
   CONSTRAINT `fk_Fecha_Lanzamiento`
     FOREIGN KEY (`lanza_nave_id_nave` , `lanza_nave_matricula` , `lanza_agencia_nombre` , `lanza_orbita_excentricidad` , `lanza_orbita_sentido` , `lanza_orbita_altura`)
     REFERENCES `BDA_TPI`.`Lanza` (`nave_id_nave` , `nave_matricula` , `agencia_nombre` , `orbita_excentricidad` , `orbita_sentido` , `orbita_altura`)

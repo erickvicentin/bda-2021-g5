@@ -24,7 +24,9 @@ optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Gravita.csv' into table Gravita fields terminated by ';'
 optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES; 
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Lanza.csv' into table Lanza fields terminated by ';'
-optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES; 
+optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Nave.csv' into table Nave fields terminated by ';'
+optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;  
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Nombre_Estado.csv' into table Nombre_Estado fields terminated by ';'
 optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES; 
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Nombre_Tripulante.csv' into table Nombre_Tripulante fields terminated by ';'
