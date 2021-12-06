@@ -1,0 +1,21 @@
+alter table Tipo_Componente add nombre varchar(45) not null;
+alter table Tipo_Componente add precio REAL not null;
+
+DROP TABLE IF EXISTS `BDA_TPI`.`Compone_de` ;
+
+CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Compone_de` (
+  `parte_de` INT NOT NULL,
+  `componente` INT NOT NULL,
+  PRIMARY KEY (`parte_de`, `componente`),
+  INDEX `fk_Compone_de_Tipo_Componente2_idx` (`componente` ASC) VISIBLE,
+  CONSTRAINT `fk_Compone_de_Tipo_Componente1`
+    FOREIGN KEY (`parte_de`)
+    REFERENCES `BDA_TPI`.`Tipo_Componente` (`codigo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Compone_de_Tipo_Componente2`
+    FOREIGN KEY (`componente`)
+    REFERENCES `BDA_TPI`.`Tipo_Componente` (`codigo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
