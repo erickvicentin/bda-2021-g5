@@ -11,6 +11,12 @@ FROM (
 	GROUP BY n.matricula) as res
 WHERE res.cantidad > 5;
 
+-- Otra forma --
+SELECT nave_matricula as 'Matricula', nave_clase_nave as 'Clase nave', count(nave_matricula) as 'Cantidad de Basura'
+FROM Produce 
+GROUP BY nave_matricula, nave_clase_nave 
+HAVING count(nave_matricula)>5;
+
 ##1.2)
 select p.basura_id, p2.basura_id, p.nave_matricula
 from Produce as p
@@ -25,7 +31,5 @@ FROM Orbita as o LEFT JOIN Lanza as l
                  AND o.altura = l.orbita_altura
                  INNER JOIN Agencia as a ON l.agencia_nombre = a.nombre
 WHERE a.tipo = 'PRIVADA';
-
-
 
 
