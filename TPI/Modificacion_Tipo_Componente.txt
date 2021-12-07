@@ -22,12 +22,11 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Compone_de` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+## Desacctivar para que se pueda cargar la data
 ## Borrar los datos de la tabla Tipo_Componente;
-DELETE from Tipo_Componente;
-
-## Después activar para que se pueda cargar la data
 SET FOREIGN_KEY_CHECKS=0;
 SET GLOBAL local_infile=1;
+DELETE from Tipo_Componente;
 
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Tipo_Componente_Modif.csv' into table Tipo_Componente 
 fields terminated by ';' optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;
@@ -48,11 +47,3 @@ as (
 	select parte_de from misPartes, Compone_de
 	where misPartes.pd = Compone_de.componente)
 select distinct * from misPartes;
-
-
-A Componente = 11, parte_de = 10
-B Tabla entera, parte_de = 11
-
-OUTER JOIN A con B = 0
-
-select componente from parte_de where componente not in [ OUTER JOIN]
