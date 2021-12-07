@@ -23,6 +23,11 @@ from Produce as p
 inner join Produce as p2
 on p.nave_matricula = p2.nave_matricula AND p.nave_clase_nave = p2.nave_clase_nave AND NOT (p.basura_id = p2.basura_id);
 
+##1.3)
+
+select distinct a.nombre from Nave as n inner join Agencia as a on n.agencia_nombre=a.nombre
+where (n.matricula,n.clase_nave) not in (select l.nave_matricula,l.nave_id_nave from Lanza as l);
+
 ##1.4)
 SELECT o.excentricidad, o.sentido, o.altura, a.nombre as Nombre_Agencia, a.tipo as TIPO
 FROM Orbita as o LEFT JOIN Lanza as l
@@ -32,6 +37,15 @@ FROM Orbita as o LEFT JOIN Lanza as l
                  INNER JOIN Agencia as a ON l.agencia_nombre = a.nombre
 WHERE a.tipo = 'PRIVADA';
 
+##1.5)
+
+SELECT sup.agencia as Agencia_Publica, ne.nombre as Estado
+FROM ( 
+	SELECT supervisada_por as agencia
+	FROM Privada 
+	GROUP BY supervisada_por
+	HAVING COUNT(supervisada_por) > 2) as sup
+    INNER JOIN Nombre_Estado as ne ON ne.publica_agencia_nombre = sup.agencia;
 
 -- PARTE 2 --
 
