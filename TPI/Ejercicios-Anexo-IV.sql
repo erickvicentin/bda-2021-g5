@@ -33,3 +33,16 @@ FROM Orbita as o LEFT JOIN Lanza as l
 WHERE a.tipo = 'PRIVADA';
 
 
+-- PARTE 2 --
+
+-- 2.1
+
+SELECT t1.componente as 'Codigo Componente' , tc.nombre as 'Nombre Componente'
+FROM (
+	SELECT componente, count(componente)
+	FROM Compone_de
+	GROUP BY componente
+	HAVING count(componente) >= 3) as t1 INNER JOIN Tipo_Componente as tc
+	ON tc.codigo = t1.componente;
+
+

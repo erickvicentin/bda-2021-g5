@@ -1,3 +1,5 @@
+USE BDA_TPI;
+
 alter table Tipo_Componente add nombre varchar(45) not null;
 alter table Tipo_Componente add precio REAL not null;
 
@@ -19,3 +21,29 @@ CREATE TABLE IF NOT EXISTS `BDA_TPI`.`Compone_de` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+## Desacctivar para que se pueda cargar la data
+## Borrar los datos de la tabla Tipo_Componente;
+SET FOREIGN_KEY_CHECKS=0;
+SET GLOBAL local_infile=1;
+DELETE from Tipo_Componente;
+
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Tipo_Componente_Modif.csv' into table Tipo_Componente 
+fields terminated by ';' optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;
+LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Compone_de.csv' into table Compone_de 
+fields terminated by ';' optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;
+
+
+2.3
+
+with recursive misPartes
+as (
+	select parte_de as pd 
+    from Compone_de 
+    where componente = 11
+    
+	union all
+    
+	select parte_de from misPartes, Compone_de
+	where misPartes.pd = Compone_de.componente)
+select distinct * from misPartes;
