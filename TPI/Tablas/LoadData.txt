@@ -48,4 +48,5 @@ optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Tipo_Componente.csv' into table Tipo_Componente fields terminated by ';'
 optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES; 
  
- 
+## Acordarse de prender nuevamente las claves Foraneas
+SET FOREIGN_KEY_CHECKS=1;
