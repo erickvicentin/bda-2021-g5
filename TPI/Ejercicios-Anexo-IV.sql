@@ -58,5 +58,43 @@ FROM (
 	GROUP BY componente
 	HAVING count(componente) >= 3) as t1 INNER JOIN Tipo_Componente as tc
 	ON tc.codigo = t1.componente;
+select * from Agencia;
 
+#2.2 Listar los pares en la forma (componente1, componente2), donde componente1 y
+#componente2 son tales que componente1 forma parte de otro que a su vez depende
+#de componente2
+select par1.componente, par2.componente
+from Compone_de as par1
+inner join Compone_de as par2 on par1.parte_de = par2.parte_de AND NOT (par1.componente = par2.componente);
+
+#2.3
+#Listar los artículos que forman parte de todas las partes (en forma directa). Luego si la
+#consulta es vacía inserte los registros que sean necesarios para que la respuesta tenga
+#resultados
+
+select componente as LComponente
+from Compone_de
+group by componente
+having count(parte_de) = (select count(distinct(parte_de)) from Compone_de);
+
+#2.4
+#Listar, para cada nombre de parte, 
+#todos los nombres de las subpartes que la componen,
+#recursivamente.
+
+with recursive misPartes as (
+	select componente as comp, tp.nombre as nombre
+    from Compone_de
+	inner join Tipo_Componente as tp on tp.codigo = Compone_de.parte_de
+    where parte_de = '11'
+    
+    UNION ALL
+    
+    select componente, tp.nombre as nombre
+    from misPartes, Compone_de
+    inner join Tipo_Componente as tp on tp.codigo = Compone_de.parte_de
+    where misPartes.comp = Compone_de.parte_de AND 
+    )
+select GROUP_CONCAT(distinct tp.nombre) as partes from misPartes
+inner join Tipo_Componente as tp on tp.codigo = comp;
 
