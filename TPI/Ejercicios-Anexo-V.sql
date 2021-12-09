@@ -26,6 +26,74 @@ END//
 DELIMITER ;
 
 -- 3
+DELIMITER //
+CREATE TRIGGER total_costos BEFORE INSERT ON Costo
+FOR EACH ROW
+BEGIN
+       SET new.costo_total = new.costo_nave + new.costo_lanza +
+       new.costo_agencia;
+END //
+DELIMITER ;
+
+
+-- Store Procedures
+-- 1
+
+DROP PROCEDURE informeNave;
+DELIMITER //
+CREATE PROCEDURE informeNave (idMatricula int)
+BEGIN
+       DECLARE cant_orbitas,cant_tripulantes,basura_producida INT;
+       
+       SET cant_orbitas = (
+		SELECT COUNT(*)
+		FROM Esta
+		GROUP BY id_nave_matricula
+		HAVING id_nave_matricula = idMatricula);
+       
+       SET cant_tripulantes = (
+		SELECT COUNT(*)
+		FROM Nombre_Tripulante
+		WHERE nave_matricula = idMatricula);
+	   
+       SET basura_producida = (
+		SELECT COUNT(*)
+		FROM Basura as b INNER JOIN Produce as p ON b.id = p.basura_id
+		WHERE p.nave_matricula = idMatricula);
+		
+        SELECT cant_orbitas,cant_tripulantes,basura_producida;
+END //
+DELIMITER ;
+
+CALL informeNave(330377);
+
+-- 2
+-- PARA QUE FUNCIONE LA CREACION:
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+DELIMITER //
+CREATE FUNCTION contarOrbitas(fecha_entrada date, n int) RETURNS INT
+BEGIN
+    DECLARE fecha_final date;
+	DECLARE cantidad int;
+	
+    SET fecha_final = (
+		SELECT date_add(fecha_entrada, interval n day)
+	);
+	
+    SET cantidad = (
+		SELECT COUNT(DISTINCT e.id_nave_matricula) 
+        FROM Esta as e INNER JOIN Fecha_Inicio as fi ON fi.esta_id_nave_matricula = e.id_nave_matricula
+        WHERE fi.dia BETWEEN fecha_entrada and fecha_final
+	);
+       
+	RETURN cantidad;
+END//
+DELIMITER ;
+
+SELECT contarOrbitas("1976-02-23", 102);
+
+
 
 -- SEGURIDAD --
 -- 1
