@@ -98,3 +98,27 @@ with recursive misPartes as (
 select GROUP_CONCAT(distinct tp.nombre) as partes from misPartes
 inner join Tipo_Componente as tp on tp.codigo = comp;
 
+
+## SECCION 3 
+
+#3.1 Dada la consulta de naves y orbitas que estuvo añada una columna adicional que
+#muestre el tiempo promedio que estuvo en cada orbita.
+
+-- DIFERENCIA DE MESES ENTRE FECHAS
+select n.matricula, n.clase_nave, group_concat(o.altura,' ', o.excentricidad,' ', o.sentido) as orbita, fi.dia, ff.dia, AVG(timestampdiff(MONTH,fi.dia,ff.dia)) as tiempo_estimado
+from Fecha_Inicio as fi
+inner join Fecha_Fin as ff on 
+							fi.esta_id_nave_matricula = ff.esta_id_nave_matricula 
+                            AND 
+                            fi.esta_id_nave_clase = ff.esta_id_nave_clase
+inner join Nave as n on 
+						fi.esta_id_nave_matricula = n.matricula
+                        AND
+                        fi.esta_id_nave_clase = n.clase_nave
+inner join Orbita as o on
+						fi.esta_id_altura = o.altura
+                        AND
+                        fi.esta_id_orbita_exc = o.excentricidad
+                        AND
+                        fi.esta_id_sentido = o.sentido
+group by fi.esta_id_nave_matricula, fi.esta_id_nave_clase, fi.dia, ff.dia;
