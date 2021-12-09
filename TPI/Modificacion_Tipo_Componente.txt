@@ -33,17 +33,3 @@ fields terminated by ';' optionally enclosed by '"' lines terminated by '\n' IGN
 LOAD DATA LOCAL infile '/home/administrador/bda-2021-g5/TPI/Tablas/Compone_de.csv' into table Compone_de 
 fields terminated by ';' optionally enclosed by '"' lines terminated by '\n' IGNORE 1 LINES;
 
-
-2.3
-
-with recursive misPartes
-as (
-	select parte_de as pd 
-    from Compone_de 
-    where componente = 11
-    
-	union all
-    
-	select parte_de from misPartes, Compone_de
-	where misPartes.pd = Compone_de.componente)
-select distinct * from misPartes;
