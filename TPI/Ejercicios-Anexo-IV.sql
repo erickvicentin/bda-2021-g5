@@ -1,7 +1,7 @@
 -- ANEXO IV) --
 
 ##1.1)
-SELECT res.matri as Matricula, res.cantidad as Cant_Basura
+explain SELECT res.matri as Matricula, res.cantidad as Cant_Basura
 FROM (
 	SELECT n.matricula as matri, COUNT(b.id) as cantidad
 	FROM Nave as n INNER JOIN Produce as p 
@@ -146,21 +146,24 @@ inner join
 on agenciaAnioBasura.agencia = AgenciaBasura.agencia AND agenciaAnioBasura.anio = AgenciaBasura.anio;
 
 -- OTRA FORMA
-                
-WITH basura_año as (select count(year(fecha_pos)) as cantidad, year(fecha_pos) as año 
-      from Posicion
-      group by año
-     order by year(fecha_pos) )
-                 
- select year(po.fecha_pos) as año2, agencia_nombre, ba.cantidad as cantidad_basura
+
+WITH basura_anio as (select count(*) as cantidad, year(fecha_pos) as anio 
+	from Posicion
+	 group by anio
+     order by year(fecha_pos))
+ select year(po.fecha_pos) as anio,n.agencia_nombre as agencia, count(b.id) as total_basura
  from Nave as n
  inner join Produce as p on n.matricula=p.nave_matricula
         and n.clase_nave=p.nave_clase_nave
  inner join Basura as b on p.basura_id=b.id
  inner join Posicion as po on b.id=po.id_pos
- inner join basura_año as ba on ba.año=year(po.fecha_pos)
- group by year(po.fecha_pos)
- having (count(b.id)*0.50) < ba.cantidad;
-
+ inner join basura_anio as ba on ba.anio= year(po.fecha_pos)
+ group by year(po.fecha_pos), n.agencia_nombre;
  
+ -- indices
+ALTER TABLE `BDA_TPI`.`Basura` ALTER INDEX `basura_index` VISIBLE
+ALTER TABLE `BDA_TPI`.`Nave` ALTER INDEX `nave_index` VISIBLE
+ALTER TABLE `BDA_TPI`.`Nave` ALTER INDEX `nave_indexx` VISIBLE
+ALTER TABLE `BDA_TPI`.`Produce` ALTER INDEX `fk_Produce_Nave1_idx` VISIBLE
+ALTER TABLE `BDA_TPI`.`Produce` ALTER INDEX `fk_Produce_Basura1_idx` VISIBLE
 
