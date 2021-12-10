@@ -125,4 +125,10 @@ CREATE TABLE prueba (id INT, PRIMARY KEY(id));
 INSERT INTO prueba(id) VALUES(1);
 SELECT * FROM prueba;
 
-USE erick;
+-- DATOS SEMI-ESTRUCURADOS: CONSULTAS
+-- 1
+select AVG(Accionista -> '$."principal_accionista".edad') 
+From Empresa
+Where (Accionista -> '$."principal_accionista"."nivel_de_estudio"') LIKE '%universitario%';
+
+
