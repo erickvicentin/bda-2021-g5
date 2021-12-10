@@ -25,17 +25,6 @@ begin
 END//
 DELIMITER ;
 
--- 3
-DELIMITER //
-CREATE TRIGGER total_costos BEFORE INSERT ON Costo
-FOR EACH ROW
-BEGIN
-       SET new.costo_total = new.costo_nave + new.costo_lanza +
-       new.costo_agencia;
-END //
-DELIMITER ;
-
-
 -- Store Procedures
 -- 1
 
@@ -131,4 +120,5 @@ select AVG(Accionista -> '$."principal_accionista".edad')
 From Empresa
 Where (Accionista -> '$."principal_accionista"."nivel_de_estudio"') LIKE '%universitario%';
 
+select (Accionista -> '$.viajes[*].mundos') as TipoViaje from Empresa where CIF is null;
 
