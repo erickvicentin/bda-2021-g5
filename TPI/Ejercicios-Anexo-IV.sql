@@ -122,3 +122,25 @@ inner join Orbita as o on
                         AND
                         fi.esta_id_sentido = o.sentido
 group by fi.esta_id_nave_matricula, fi.esta_id_nave_clase, o.altura, o.excentricidad, o.sentido;
+
+
+## 3.2
+#Liste el nombre de las agencias cuyas naves producen más del 50% del promedio de
+#cantidad de basura en un año.
+
+select agenciaAnioBasura.agencia, agenciaAnioBasura.anio, (agenciaAnioBasura.cantidad_de_basura + AgenciaBasura.cantidad_de_basura) as basura_anual
+from 
+	(select l.agencia_nombre as agencia, year(pos.fecha_pos) as anio, count(pos.id_pos) as cantidad_de_basura
+	from Lanza as l
+	inner join Produce as pr on pr.nave_matricula = l.nave_matricula AND pr.nave_clase_nave = l.nave_id_nave
+	inner join Basura as b on pr.basura_id = b.id
+	inner join Posicion as pos on pos.id_pos = b.id
+	group by l.agencia_nombre, year(pos.fecha_pos)) as agenciaAnioBasura
+inner join
+	(select l1.agencia_nombre as agencia, year(gen.fecha) as anio, count(gen.id_generado) as cantidad_de_basura
+	from Lanza as l1
+	inner join Produce as pr1 on pr1.nave_matricula = l1.nave_matricula AND pr1.nave_clase_nave = l1.nave_id_nave
+	inner join Basura as b1 on pr1.basura_id = b1.id
+	inner join Genera as gen on b1.id = gen.id_genera
+	group by l1.agencia_nombre, year(gen.fecha), gen.id_genera) as AgenciaBasura 
+on agenciaAnioBasura.agencia = AgenciaBasura.agencia AND agenciaAnioBasura.anio = AgenciaBasura.anio;
