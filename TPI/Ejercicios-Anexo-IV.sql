@@ -144,3 +144,23 @@ inner join
 	inner join Genera as gen on b1.id = gen.id_genera
 	group by l1.agencia_nombre, year(gen.fecha), gen.id_genera) as AgenciaBasura 
 on agenciaAnioBasura.agencia = AgenciaBasura.agencia AND agenciaAnioBasura.anio = AgenciaBasura.anio;
+
+-- OTRA FORMA
+                
+WITH basura_año as (select count(year(fecha_pos)) as cantidad, year(fecha_pos) as año 
+      from Posicion
+      group by año
+     order by year(fecha_pos) )
+                 
+ select year(po.fecha_pos) as año2, agencia_nombre, ba.cantidad as cantidad_basura
+ from Nave as n
+ inner join Produce as p on n.matricula=p.nave_matricula
+        and n.clase_nave=p.nave_clase_nave
+ inner join Basura as b on p.basura_id=b.id
+ inner join Posicion as po on b.id=po.id_pos
+ inner join basura_año as ba on ba.año=year(po.fecha_pos)
+ group by year(po.fecha_pos)
+ having (count(b.id)*0.50) < ba.cantidad;
+
+ 
+
